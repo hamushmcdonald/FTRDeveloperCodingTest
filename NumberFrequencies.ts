@@ -2,33 +2,9 @@ import {LinkedList, Val} from './DataStructures';
 
 let halted: boolean = false;
 let quitted: boolean = false;
-let userInput: any = null;
 let emittingFrequency: number;
-let numbersFrequency: LinkedList = new LinkedList(0);
-
-// //prompt the user for the number of seconds between outputting the frequency of each number to the screen then multiplyed by 
-// //1000 to get milliseconds
-// let retrieveEmittingFrequency = new Promise((resolve, reject) => {
-//     console.log("Please input the amount of time in seconds between emitting numbers and their frequency");
-//     process.stdin.on('data', frequencySeconds => {
-//     emittingFrequency = Number(frequencySeconds) * 1000;
-//     if (emittingFrequency != undefined) {
-//         resolve(emittingFrequency);
-//     }
-
-//     process.exit();
-//     });
-// });
-
-// //create frequency descending order linked list of numbers and their frequencies
-// let retrieveFirstNumber = new Promise((resolve, reject) => {
-//     console.log("Please enter the first number");
-//     process.stdin.on('data', firstNumber => {
-//         numbersFrequency = new LinkedList(Number(firstNumber));
-//         resolve(numbersFrequency);
-//         process.exit()
-//     });
-// });
+let numbersFrequency: LinkedList = new LinkedList(-1);
+let i = 0;
 
 function recursiveNumbersFrequency(): void {
     while (!quitted) {
@@ -79,40 +55,12 @@ function updateNumbersFrequency(newNumber: number) {
     }
 }
 
-// function retrieveNextNumber() {
-//     process.stdin.on('data', input => {
-//         console.log("Please enter the next number");
-//         if (userInput.toString() == 'halt') {
-//             if (!halted) {
-//                 halted = true;
-//                 console.log("timer halted");
-//             } else {
-//                 //throw error
-//             }  
-//         } else if (userInput.toString() == 'resume') {
-//             if (halted) {
-//                 halted = false;
-//                 setTimeout(recursiveNumbersFrequency, emittingFrequency);
-//                 console.log("timer resumed");
-//             } else {
-//                 //throw error
-//             }
-//         } else {
-//             try {
-//                 updateNumbersFrequency(Number(userInput));
-//             } catch (error) {
-//                 console.error(error);
-//             }
-//         }
-//         process.exit();    
-//     });   
-//}
-
-let i = 0;
 console.log("Please input the amount of time in seconds between emitting numbers and their frequency");
+
 process.stdin.on('readable', () => {
     let chunk;
-    while ((chunk = process.stdin.read()) !== null) {
+
+    while ((chunk = process.stdin.read()) !== null && !quitted) {
         if (i == 0) {
             emittingFrequency = Number(chunk) * 1000;
             console.log("Please enter the first number");
@@ -123,14 +71,14 @@ process.stdin.on('readable', () => {
             console.log("Please enter the next number");
 
         } else {
-            if (chunk.toString() == 'halt') {
+            if (String(chunk) == "halt") {
                 if (!halted) {
                     halted = true;
                     console.log("timer halted");
                 } else {
                     //throw error
                 }  
-            } else if (chunk.toString() == 'resume') {
+            } else if (String(chunk) == "resume") {
                 if (halted) {
                     halted = false;
                     setTimeout(recursiveNumbersFrequency, emittingFrequency);
@@ -149,19 +97,8 @@ process.stdin.on('readable', () => {
         }    
         i++; 
     }
-    
+    displayNumbersFrequency();
+    console.log("Thanks for playing, press any key to exit.");  
 });
 
-displayNumbersFrequency();
-console.log("Thanks for playing, press any key to exit.")      
-
-// retrieveEmittingFrequency.then(
-//     function(value) {retrieveFirstNumber.then( 
-//         function(value) {setTimeout(recursiveNumbersFrequency, emittingFrequency)
-//     })
-// });
-
-// while (!quitted) {
-//     retrieveNextNumber();
-// } 
 
