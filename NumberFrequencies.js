@@ -57,25 +57,28 @@ var halted = false;
 var quitted = false;
 var userInput = null;
 var emittingFrequency;
-var numbersFrequency;
-//prompt the user for the number of seconds between outputting the frequency of each number to the screen then multiplyed by 1000 to get milliseconds
-console.log("Please input the amount of time in seconds between emitting numbers and their frequency");
-process.stdin.on('data', function (frequencySeconds) {
-    emittingFrequency = Number(frequencySeconds) * 1000;
-    createNumbersFrequency();
-    process.exit();
+var numbersFrequency = new LinkedList(0);
+//prompt the user for the number of seconds between outputting the frequency of each number to the screen then multiplyed by 
+//1000 to get milliseconds
+var retrieveEmittingFrequency = new Promise(function (resolve, reject) {
+    console.log("Please input the amount of time in seconds between emitting numbers and their frequency");
+    process.stdin.on('data', function (frequencySeconds) {
+        emittingFrequency = Number(frequencySeconds) * 1000;
+        if (emittingFrequency != undefined) {
+            resolve(emittingFrequency);
+        }
+        process.exit();
+    });
 });
 //create frequency descending order linked list of numbers and their frequencies
-function createNumbersFrequency() {
+var retrieveFirstNumber = new Promise(function (resolve, reject) {
     console.log("Please enter the first number");
     process.stdin.on('data', function (firstNumber) {
         numbersFrequency = new LinkedList(Number(firstNumber));
-        //first call of recursiveNumbersFrequency after which it will call itself recursively ad infinitum
-        setTimeout(recursiveNumbersFrequency, emittingFrequency);
-        main();
+        resolve(numbersFrequency);
         process.exit();
     });
-}
+});
 function recursiveNumbersFrequency() {
     while (!quitted) {
         while (!halted) {
@@ -123,39 +126,88 @@ function updateNumbersFrequency(newNumber) {
         }
     }
 }
-function main() {
-    console.log("Please enter the next number");
-    while (userInput != "quit") {
-        process.stdin.on('data', function (input) {
-            if (userInput.toString() == 'halt') {
-                if (!halted) {
-                    halted = true;
-                    console.log("timer halted");
-                }
-                else {
-                    //throw error
-                }
-            }
-            else if (userInput.toString() == 'resume') {
-                if (halted) {
-                    halted = false;
-                    setTimeout(recursiveNumbersFrequency, emittingFrequency);
-                    console.log("timer resumed");
-                }
-                else {
-                    //throw error
-                }
+function retrieveNextNumber() {
+    process.stdin.on('data', function (input) {
+        console.log("Please enter the next number");
+        if (userInput.toString() == 'halt') {
+            if (!halted) {
+                halted = true;
+                console.log("timer halted");
             }
             else {
-                try {
-                    updateNumbersFrequency(Number(userInput));
-                }
-                catch (error) {
-                    console.error(error);
-                }
+                //throw error
             }
-        });
-    }
-    displayNumbersFrequency();
-    console.log("Thanks for playing, press any key to exit.");
+        }
+        else if (userInput.toString() == 'resume') {
+            if (halted) {
+                halted = false;
+                setTimeout(recursiveNumbersFrequency, emittingFrequency);
+                console.log("timer resumed");
+            }
+            else {
+                //throw error
+            }
+        }
+        else {
+            try {
+                updateNumbersFrequency(Number(userInput));
+            }
+            catch (error) {
+                console.error(error);
+            }
+        }
+        process.exit();
+    });
 }
+function main() {
+    // process.stdin.on('readable', () => {
+    //     let chunk;
+    //     if ((chunk = process.stdin.read()) !== null) {
+    //         process.stdout.write("Please input the amount of time in seconds between emitting numbers and their frequency");
+    //         emittingFrequency = Number(chunk) * 1000;
+    //     }
+    //     if ((chunk = process.stdin.read()) !== null) {
+    //         process.stdout.write("Please enter the first number");
+    //         numbersFrequency = new LinkedList(Number(chunk));
+    //         setTimeout(recursiveNumbersFrequency, emittingFrequency);
+    //     }
+    //     while (!quitted) {
+    //         while ((chunk = process.stdin.read()) !== null) {
+    //             process.stdout.write("Please enter the next number");
+    //             if (chunk.toString() == 'halt') {
+    //                 if (!halted) {
+    //                     halted = true;
+    //                     console.log("timer halted");
+    //                 } else {
+    //                     //throw error
+    //                 }  
+    //             } else if (chunk.toString() == 'resume') {
+    //                 if (halted) {
+    //                     halted = false;
+    //                     setTimeout(recursiveNumbersFrequency, emittingFrequency);
+    //                     console.log("timer resumed");
+    //                 } else {
+    //                     //throw error
+    //                 }
+    //             } else {
+    //                 try {
+    //                     updateNumbersFrequency(Number(chunk));
+    //                 } catch (error) {
+    //                     console.error(error);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     displayNumbersFrequency();
+    //     console.log("Thanks for playing, press any key to exit.")      
+    // });
+    retrieveEmittingFrequency.then(function (value) {
+        retrieveFirstNumber.then(function (value) {
+            setTimeout(recursiveNumbersFrequency, emittingFrequency);
+        });
+    });
+    while (!quitted) {
+        retrieveNextNumber();
+    }
+}
+main();

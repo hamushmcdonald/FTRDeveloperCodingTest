@@ -1,102 +1,34 @@
-//class for a doubly linked list
-class LinkedList {
-    private headVal: Val;
-    private tailVal: Val;
-
-    public constructor(value: number) {
-        const newVal = new Val(null, null, value);
-        this.headVal = newVal;
-        this.tailVal = newVal;
-    }
-
-    //appends a value to the end of the list
-    public add(value: number) {
-        let newVal = new Val(this.tailVal, null, value);
-        this.tailVal.setNext(newVal);
-        this.tailVal = newVal;
-    }
-
-    public getHeadVal(): Val {
-        return this.headVal;
-    }
-
-    public getTailVal(): Val {
-        return this.tailVal;
-    } 
-
-    public setHeadVal(newHead: Val) {
-        this.headVal = newHead;
-    }
-}
-
-//class for a value in a doubly linked list which contains a value and a frequency
-class Val {
-    private previousVal: Val;
-    private nextVal: Val;
-    private value: number;
-    private frequency: number;
-
-    public constructor(previous: Val, next: Val, value: number) {
-        this.previousVal = previous;
-        this.nextVal = next;
-        this.value = value;
-        this.frequency = 1;
-    }
-
-    public getPrevious(): Val {
-        return this.previousVal;
-    }
-
-    public getNext(): Val {
-        return this.nextVal;
-    }
-
-    public getValue(): number {
-        return this.value;
-    }
-
-    public getFrequency(): number {
-        return this.frequency;
-    }
-
-    public setPrevious(previous: Val) {
-        this.previousVal = previous;
-    }
-
-    public setNext(next: Val) {
-        this.nextVal = next;
-    }
-
-    public incrementFrequency() {
-        this.frequency += 1
-    }
-}
+import {LinkedList, Val} from './DataStructures';
 
 let halted: boolean = false;
 let quitted: boolean = false;
 let userInput: any = null;
 let emittingFrequency: number;
-let numbersFrequency: LinkedList;
+let numbersFrequency: LinkedList = new LinkedList(0);
 
-//prompt the user for the number of seconds between outputting the frequency of each number to the screen then multiplyed by 1000 to get milliseconds
-console.log("Please input the amount of time in seconds between emitting numbers and their frequency");
-process.stdin.on('data', frequencySeconds => {
-    emittingFrequency = Number(frequencySeconds) * 1000;
-    createNumbersFrequency();
-    process.exit();
-});
+// //prompt the user for the number of seconds between outputting the frequency of each number to the screen then multiplyed by 
+// //1000 to get milliseconds
+// let retrieveEmittingFrequency = new Promise((resolve, reject) => {
+//     console.log("Please input the amount of time in seconds between emitting numbers and their frequency");
+//     process.stdin.on('data', frequencySeconds => {
+//     emittingFrequency = Number(frequencySeconds) * 1000;
+//     if (emittingFrequency != undefined) {
+//         resolve(emittingFrequency);
+//     }
 
-//create frequency descending order linked list of numbers and their frequencies
-function createNumbersFrequency() {
-    console.log("Please enter the first number");
-    process.stdin.on('data', firstNumber => {
-        numbersFrequency = new LinkedList(Number(firstNumber));
-        //first call of recursiveNumbersFrequency after which it will call itself recursively ad infinitum
-        setTimeout(recursiveNumbersFrequency, emittingFrequency);
-        main();
-        process.exit();
-    });
-}
+//     process.exit();
+//     });
+// });
+
+// //create frequency descending order linked list of numbers and their frequencies
+// let retrieveFirstNumber = new Promise((resolve, reject) => {
+//     console.log("Please enter the first number");
+//     process.stdin.on('data', firstNumber => {
+//         numbersFrequency = new LinkedList(Number(firstNumber));
+//         resolve(numbersFrequency);
+//         process.exit()
+//     });
+// });
 
 function recursiveNumbersFrequency(): void {
     while (!quitted) {
@@ -146,18 +78,59 @@ function updateNumbersFrequency(newNumber: number) {
         }
     }
 }
-function main() {
-    console.log("Please enter the next number");
-    while (userInput != "quit") {
-        process.stdin.on('data', input => {
-            if (userInput.toString() == 'halt') {
+
+// function retrieveNextNumber() {
+//     process.stdin.on('data', input => {
+//         console.log("Please enter the next number");
+//         if (userInput.toString() == 'halt') {
+//             if (!halted) {
+//                 halted = true;
+//                 console.log("timer halted");
+//             } else {
+//                 //throw error
+//             }  
+//         } else if (userInput.toString() == 'resume') {
+//             if (halted) {
+//                 halted = false;
+//                 setTimeout(recursiveNumbersFrequency, emittingFrequency);
+//                 console.log("timer resumed");
+//             } else {
+//                 //throw error
+//             }
+//         } else {
+//             try {
+//                 updateNumbersFrequency(Number(userInput));
+//             } catch (error) {
+//                 console.error(error);
+//             }
+//         }
+//         process.exit();    
+//     });   
+//}
+
+let i = 0;
+console.log("Please input the amount of time in seconds between emitting numbers and their frequency");
+process.stdin.on('readable', () => {
+    let chunk;
+    while ((chunk = process.stdin.read()) !== null) {
+        if (i == 0) {
+            emittingFrequency = Number(chunk) * 1000;
+            console.log("Please enter the first number");
+            
+        } else if (i == 1) {
+            numbersFrequency = new LinkedList(Number(chunk));
+            setTimeout(recursiveNumbersFrequency, emittingFrequency);
+            console.log("Please enter the next number");
+
+        } else {
+            if (chunk.toString() == 'halt') {
                 if (!halted) {
                     halted = true;
                     console.log("timer halted");
                 } else {
                     //throw error
                 }  
-            } else if (userInput.toString() == 'resume') {
+            } else if (chunk.toString() == 'resume') {
                 if (halted) {
                     halted = false;
                     setTimeout(recursiveNumbersFrequency, emittingFrequency);
@@ -167,15 +140,28 @@ function main() {
                 }
             } else {
                 try {
-                    updateNumbersFrequency(Number(userInput));
+                    updateNumbersFrequency(Number(chunk));
                 } catch (error) {
                     console.error(error);
                 }
-            }    
-        });   
+            }
+            console.log("Please enter the next number");
+        }    
+        i++; 
     }
+    
+});
 
-    displayNumbersFrequency();
-    console.log("Thanks for playing, press any key to exit.")
-}
+displayNumbersFrequency();
+console.log("Thanks for playing, press any key to exit.")      
+
+// retrieveEmittingFrequency.then(
+//     function(value) {retrieveFirstNumber.then( 
+//         function(value) {setTimeout(recursiveNumbersFrequency, emittingFrequency)
+//     })
+// });
+
+// while (!quitted) {
+//     retrieveNextNumber();
+// } 
 
