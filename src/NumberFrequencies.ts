@@ -16,11 +16,17 @@ function recursiveNumbersFrequency(): void {
 //displays numbers and their frequency in the form number:frequency, number:frequency, etc.
 function displayNumbersFrequency() {
     console.log("displayNumbersFrequency()");
+    //set the first number in the list to be printed
     let currentVal: Val = numbersFrequency.getHeadVal();
+    //while the current element is not the final element in the list
     while (currentVal.getNext() != null) {
+        //log the value and frequency of the element and increment the element
         console.log(currentVal.getValue() + ":" + currentVal.getFrequency() + ", ");
-        currentVal = currentVal.getNext()
+        currentVal = currentVal.getNext();
     }
+    //log the value and frequency of the final element
+    console.log(currentVal.getValue() + ":" + currentVal.getFrequency());
+    
 }
 
 //updates numbersFrequency LinkedList to include or increment the number newNumber
@@ -84,13 +90,17 @@ let i = 0;
 
 function main() {
 
+    //prompt the user to enter a value in seconds between displaying the numbers and frequencies
     console.log("Please input the amount of time in seconds between emitting numbers and their frequency");
 
+    //start waiting for user input
     process.stdin.on('readable', () => {
         let chunk;
 
+        //assign user input to chunk and make sure its not empty
         while ((chunk = process.stdin.read()) !== null) {
             console.log(i);
+            //if the user entered halt and halted is false set halted to true
             if (String(chunk) == "halt") {
                 if (!halted) {
                     halted = true;
@@ -98,6 +108,7 @@ function main() {
                 } else {
                     //throw error
                 }  
+            //if the user entered resume and halted is true set halted to false and restart recursiveNumbersFrequency
             } else if (String(chunk) == "resume") {
                 if (halted) {
                     halted = false;
@@ -106,20 +117,23 @@ function main() {
                 } else {
                     //throw error
                 }
+            //if the user entered quit display the numbers frequency and exit program
             } else if (String(chunk) == "quit") {
                 displayNumbersFrequency();
                 console.log("Thanks for playing, press any key to exit.");
-                return; 
+                return;
+            //otherwise only valid input is an number to be added to frequency list 
             } else {
+                //assigns user input to emitting frequency * 1000
                 if (i == 0) {
                     emittingFrequency = Number(chunk) * 1000;
                     console.log("Please enter the first number");
-                    
+                //uses user input to initialise numbers frequency   
                 } else if (i == 1) {
                     numbersFrequency = new LinkedList(Number(chunk));
                     setTimeout(recursiveNumbersFrequency, emittingFrequency);
                     console.log("Please enter the next number");
-        
+                //adds user input to existing linked list
                 } else {
                     try {
                         updateNumbersFrequency(Number(chunk));
@@ -127,9 +141,10 @@ function main() {
                         console.error(error);
                     }
                     console.log("Please enter the next number");
-                }    
+                }
+                i++;    
             }
-            i++; 
+             
         }
     });
 }
