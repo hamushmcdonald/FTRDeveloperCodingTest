@@ -1,20 +1,16 @@
 "use strict";
 exports.__esModule = true;
 var DataStructures_1 = require("./DataStructures");
-var halted = false;
-var quitted = false;
-var emittingFrequency;
-var numbersFrequency = new DataStructures_1.LinkedList(-1);
-var i = 0;
 function recursiveNumbersFrequency() {
-    while (!quitted) {
-        while (!halted) {
-            setTimeout(recursiveNumbersFrequency, emittingFrequency);
-            displayNumbersFrequency();
-        }
+    console.log("recursiveNumbersFrequency()");
+    if (!halted) {
+        console.log("inside recursiveNumbersFrequency");
+        setTimeout(recursiveNumbersFrequency, emittingFrequency);
+        displayNumbersFrequency();
     }
 }
 function displayNumbersFrequency() {
+    console.log("displayNumbersFrequency");
     var currentVal = numbersFrequency.getHeadVal();
     while (currentVal.getNext() != null) {
         console.log(currentVal.getValue() + ":" + currentVal.getFrequency() + ", ");
@@ -22,6 +18,7 @@ function displayNumbersFrequency() {
     }
 }
 function updateNumbersFrequency(newNumber) {
+    console.log("updateNumbersFrequency()");
     var currentVal = numbersFrequency.getHeadVal();
     if (currentVal.getValue() == newNumber) {
         currentVal.incrementFrequency();
@@ -53,20 +50,16 @@ function updateNumbersFrequency(newNumber) {
         }
     }
 }
-console.log("Please input the amount of time in seconds between emitting numbers and their frequency");
-process.stdin.on('readable', function () {
-    var chunk;
-    while ((chunk = process.stdin.read()) !== null && !quitted) {
-        if (i == 0) {
-            emittingFrequency = Number(chunk) * 1000;
-            console.log("Please enter the first number");
-        }
-        else if (i == 1) {
-            numbersFrequency = new DataStructures_1.LinkedList(Number(chunk));
-            setTimeout(recursiveNumbersFrequency, emittingFrequency);
-            console.log("Please enter the next number");
-        }
-        else {
+var halted = false;
+var emittingFrequency;
+var numbersFrequency;
+var i = 0;
+function main() {
+    console.log("Please input the amount of time in seconds between emitting numbers and their frequency");
+    process.stdin.on('readable', function () {
+        var chunk;
+        while ((chunk = process.stdin.read()) !== null) {
+            console.log(i);
             if (String(chunk) == "halt") {
                 if (!halted) {
                     halted = true;
@@ -86,18 +79,34 @@ process.stdin.on('readable', function () {
                     //throw error
                 }
             }
+            else if (String(chunk) == "quit") {
+                displayNumbersFrequency();
+                console.log("Thanks for playing, press any key to exit.");
+                return;
+            }
             else {
-                try {
-                    updateNumbersFrequency(Number(chunk));
+                if (i == 0) {
+                    emittingFrequency = Number(chunk) * 1000;
+                    console.log("Please enter the first number");
                 }
-                catch (error) {
-                    console.error(error);
+                else if (i == 1) {
+                    numbersFrequency = new DataStructures_1.LinkedList(Number(chunk));
+                    setTimeout(recursiveNumbersFrequency, emittingFrequency);
+                    console.log("timeout started");
+                    console.log("Please enter the next number");
+                }
+                else {
+                    try {
+                        updateNumbersFrequency(Number(chunk));
+                    }
+                    catch (error) {
+                        console.error(error);
+                    }
+                    console.log("Please enter the next number");
                 }
             }
-            console.log("Please enter the next number");
+            i++;
         }
-        i++;
-    }
-    displayNumbersFrequency();
-    console.log("Thanks for playing, press any key to exit.");
-});
+    });
+}
+main();

@@ -33,7 +33,7 @@ export class LinkedList {
 export class Val {
     private previousVal: Val;
     private nextVal: Val;
-    private value: number;
+    private readonly value: number;
     private frequency: number;
 
     public constructor(previous: Val, next: Val, value: number) {
