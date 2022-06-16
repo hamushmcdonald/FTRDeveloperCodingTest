@@ -1,8 +1,11 @@
+
 const assert = require('assert');
-const recursiveNumbersFrequency = require('../NumberFrequencies').recursiveNumbersFrequency();
-const displayNumbersFrequency = require('../NumberFrequencies').displayNumbersFrequency();
-const updateNumbersFrequency = require('../NumberFrequencies').updateNumbersFrequency();
-const isFibonnaci = require('../NumberFrequencies').isFibonnaci();
+const LinkedList = require('../DataStructures.js').LinkedList;
+const Val = require('../DataStructures.js').Val;
+const recursiveNumbersFrequency = require('../NumberFrequencies.js').recursiveNumbersFrequency();
+const displayNumbersFrequency = require('../NumberFrequencies.js').displayNumbersFrequency();
+const updateNumbersFrequency = require('../NumberFrequencies.js').updateNumbersFrequency();
+const isFibonnaci = require('../NumberFrequencies.js').isFibonnaci();
 
 beforeEach(function() {
     var log = console.log;
@@ -12,7 +15,7 @@ beforeEach(function() {
   });
 
 describe('NumberFrequencies', function() {
-    //unit tests for recursiveNumbersFrequency()
+    //integration tests for recursiveNumbersFrequency() and displayNumbersFrequency()
     it("should log nothing: false/false", function() {
         let NumbersFrequency = new LinkedList(1);
         let halted = false;

@@ -1,0 +1,14 @@
+{
+    "name": "mochatest",
+    "version": "1.0.0",
+    "description": "",
+    "main": "NumberFrequencies.js",
+    "scripts": {
+        "test": "mocha"
+    },
+    "author": "Hamish McDonald",
+    "licence": "ISC",
+    "devDependencies": {
+        "mocha": "^3.5.3"
+    }
+}

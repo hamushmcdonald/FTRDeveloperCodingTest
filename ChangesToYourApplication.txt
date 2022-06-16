@@ -1,15 +1,26 @@
 1. You have a new requirement to implement for your application: its logic should stay
 exactly the same but it will need to have a different user interface (e.g. if you wrote a
-web app, a different UI may be a REPL). Please describe how you would go about implementing this new UI in your application?
-Would you need to restructure your solution in any way?
+web app, a different UI may be a REPL). Please describe how you would go about implementing 
+this new UI in your application? Would you need to restructure your solution in any way?
 
-In order to deploy the CLI program NumberFrequencies as a web app...
-
+In order to deploy the CLI program NumberFrequencies as a web app my solution will need to be 
+restructred in many ways. Firstly a form element will need to be used to recieve user input, it
+will be controlled in the main() function of my application. Rather than printing output to the
+console, text output will be printed to the web page, each call to console.log() will be replaced
+with a call to edit the html body. Finally the logic surrounding halt, resume and quit in the 
+existing application will be replaced by button elements in the web app.
 
 2. You now need to make your application “production ready”, and deploy it so that it can
 be used by customers. Please describe the steps you’d need to take for this to happen.
 
-
+In order to make the application production ready I would deploy it as a ASP.NET Core Web App 
+(Model-View-Controller) using AWS Amplify as this is currently the stack I am learning how to use 
+for a personal project.
 
 3. What did you think about this coding test - is there anything you’d suggest in order to
 improve it?
+
+Overall I enjoyed this coding test quite a bit. It was my first time using Typescript but I picked it up relatively
+easily as it shares many similarites with languages I have previously used. The test definitely illustrated to me 
+that I need more practice with node. I would guess that I could have completed the test in half the time with better 
+knowledge of node.

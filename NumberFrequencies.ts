@@ -1,7 +1,7 @@
 import {LinkedList, Val} from './DataStructures';
 
 //recursively calls displayNumberFrequencies in intervals set by emittingFrequency provided program is not halted
-function recursiveNumbersFrequency(): void {
+export function recursiveNumbersFrequency(): void {
     //if quitted do nothing
     if (!quitted) {
         //if halted do nothing
@@ -16,7 +16,7 @@ function recursiveNumbersFrequency(): void {
 }
 
 //displays numbers and their frequency in the form number:frequency, number:frequency, etc.
-function displayNumbersFrequency() {
+export function displayNumbersFrequency() {
     //set the first number in the list to be printed
     let currentVal: Val = numbersFrequency.getHeadVal();
     //while the current element is not the final element in the list
@@ -30,7 +30,7 @@ function displayNumbersFrequency() {
 }
 
 //updates numbersFrequency LinkedList to include or increment the number newNumber
-function updateNumbersFrequency(newNumber: number) {
+export function updateNumbersFrequency(newNumber: number) {
     //set the first number in the list to be searched
     let currentVal: Val = numbersFrequency.getHeadVal();
     //if number to be added is the first number in the list
@@ -80,7 +80,7 @@ function updateNumbersFrequency(newNumber: number) {
 }
 
 //helper function shifts the incremented value to the correct position in the list
-function shiftIncremented(incrementedVal: Val, currentVal: Val) {
+export function shiftIncremented(incrementedVal: Val, currentVal: Val) {
     incrementedVal.getPrevious().setNext(incrementedVal.getNext());
     //only set the next elements previous if the incremented element has a next ie not the tail
     if (incrementedVal.getNext() != null) {
@@ -94,7 +94,7 @@ function shiftIncremented(incrementedVal: Val, currentVal: Val) {
 }
 
 //returns true if the number passed is one of the first 1000 fibonnaci numbers
-function isFibonnaci(num: Number): boolean {
+export function isFibonnaci(num: Number): boolean {
     let twoPreviousFib: number = 0;
     let previousFib: number = 1;
     let currentFib: number = null;

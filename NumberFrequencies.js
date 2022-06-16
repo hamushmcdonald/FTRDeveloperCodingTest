@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+exports.isFibonnaci = exports.shiftIncremented = exports.updateNumbersFrequency = exports.displayNumbersFrequency = exports.recursiveNumbersFrequency = void 0;
 var DataStructures_1 = require("./DataStructures");
 //recursively calls displayNumberFrequencies in intervals set by emittingFrequency provided program is not halted
 function recursiveNumbersFrequency() {
@@ -15,6 +16,7 @@ function recursiveNumbersFrequency() {
         }
     }
 }
+exports.recursiveNumbersFrequency = recursiveNumbersFrequency;
 //displays numbers and their frequency in the form number:frequency, number:frequency, etc.
 function displayNumbersFrequency() {
     //set the first number in the list to be printed
@@ -28,6 +30,7 @@ function displayNumbersFrequency() {
     //log the value and frequency of the final element
     console.log(currentVal.getValue() + ":" + currentVal.getFrequency());
 }
+exports.displayNumbersFrequency = displayNumbersFrequency;
 //updates numbersFrequency LinkedList to include or increment the number newNumber
 function updateNumbersFrequency(newNumber) {
     //set the first number in the list to be searched
@@ -78,7 +81,8 @@ function updateNumbersFrequency(newNumber) {
     //if number to be added is not in the list
     numbersFrequency.add(newNumber);
 }
-//shifts the incremented value to the correct position in the list
+exports.updateNumbersFrequency = updateNumbersFrequency;
+//helper function shifts the incremented value to the correct position in the list
 function shiftIncremented(incrementedVal, currentVal) {
     incrementedVal.getPrevious().setNext(incrementedVal.getNext());
     //only set the next elements previous if the incremented element has a next ie not the tail
@@ -91,6 +95,8 @@ function shiftIncremented(incrementedVal, currentVal) {
     currentVal.setNext(incrementedVal);
     numbersFrequency.resetTailVal();
 }
+exports.shiftIncremented = shiftIncremented;
+//returns true if the number passed is one of the first 1000 fibonnaci numbers
 function isFibonnaci(num) {
     var twoPreviousFib = 0;
     var previousFib = 1;
@@ -110,6 +116,7 @@ function isFibonnaci(num) {
     }
     return false;
 }
+exports.isFibonnaci = isFibonnaci;
 //is the program halted?: false if no, true if yes
 var halted = false;
 //has the user quit the program?: false if no, true if yes
