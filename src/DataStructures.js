@@ -23,6 +23,13 @@ var LinkedList = /** @class */ (function () {
     LinkedList.prototype.setHeadVal = function (newHead) {
         this.headVal = newHead;
     };
+    LinkedList.prototype.resetTailVal = function () {
+        var currentVal = this.headVal;
+        while (currentVal.getNext() != null) {
+            currentVal = currentVal.getNext();
+        }
+        this.tailVal = currentVal;
+    };
     return LinkedList;
 }());
 exports.LinkedList = LinkedList;

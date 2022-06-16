@@ -27,6 +27,14 @@ export class LinkedList {
     public setHeadVal(newHead: Val) {
         this.headVal = newHead;
     }
+
+    public resetTailVal() {
+        let currentVal: Val = this.headVal;
+        while (currentVal.getNext() != null) {
+            currentVal = currentVal.getNext();
+        }
+        this.tailVal = currentVal;
+    }
 }
 
 //class for a value in a doubly linked list which contains a value and a frequency
