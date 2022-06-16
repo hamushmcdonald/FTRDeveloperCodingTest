@@ -79,7 +79,7 @@ function updateNumbersFrequency(newNumber: number) {
     numbersFrequency.add(newNumber);
 }
 
-//shifts the incremented value to the correct position in the list
+//helper function shifts the incremented value to the correct position in the list
 function shiftIncremented(incrementedVal: Val, currentVal: Val) {
     incrementedVal.getPrevious().setNext(incrementedVal.getNext());
     //only set the next elements previous if the incremented element has a next ie not the tail
@@ -93,6 +93,7 @@ function shiftIncremented(incrementedVal: Val, currentVal: Val) {
     numbersFrequency.resetTailVal()
 }
 
+//returns true if the number passed is one of the first 1000 fibonnaci numbers
 function isFibonnaci(num: Number): boolean {
     let twoPreviousFib: number = 0;
     let previousFib: number = 1;
